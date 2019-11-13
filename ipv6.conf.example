@@ -1,0 +1,16 @@
+#----config----
+#your domain : "example.com" DOMAIN="example.com"
+DOMAIN="example.com"
+#subdomain : "test.example.com" SUBDOMAIN="test"
+SUBDOMAIN="test"
+#API Token 生成方法详见：
+#https://support.dnspod.cn/Kb/showarticle/tsid/227/，
+#完整的 API Token 是由 ID,Token 组合而成的，用英文的逗号分割
+ID="123456"
+TOKEN="xxxxxxxxxxxxx"
+#是否使用方糖推送信息 1--使用 0--不使用(默认)
+#方糖推送 sc.ftqq.com
+FTPUSH=1
+#FTPUSH=1时修改FTSCKEY
+FTSCKEY="SCUxxxxxxxxx"
+#-------------
