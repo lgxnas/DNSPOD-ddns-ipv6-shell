@@ -47,7 +47,7 @@ function ftPush(){
 		record_id: ${RECORD_ID}"
 	curl -s -F"text=$TEXT" \
 			-F"desp=$DESP" \
-			"http://sc.ftqq.com/${FT}.send"
+			"http://sc.ftqq.com/${FTSCKEY}.send"
 }
 #echo -e "local ip:"$LOCALIPV6"\nremote ip:"$REMOTEIPV6
 if [ "$LOCALIPV6" == "$REMOTEIPV6" ];then
@@ -55,7 +55,7 @@ if [ "$LOCALIPV6" == "$REMOTEIPV6" ];then
 	exit
 else
 	curl -s -X POST ${MODIFY_URL} -d ${MODIFYARG} >${JSONFILE}
-	echo -e '${LOCALIPV6}\t$(date +%F" "%T)\n' >> ${LOGFILE}	
+	echo -e "${LOCALIPV6}\t$(date +%F' '%T)\n" >> ${LOGFILE}	
 	if [ $FTPUSH -eq 1 ];then
 		ftPush
 	fi
