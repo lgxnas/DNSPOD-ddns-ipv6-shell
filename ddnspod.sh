@@ -45,16 +45,25 @@ function ftPush(){
 		subdomain: ${SUBDOMAIN}.${DOMAIN}  
 		date: $(date +%F' '%T)  
 		record_id: ${RECORD_ID}"
-	curl -s -F"text=$TEXT" \
+	FT_JSON=$(curl -s -F"text=$TEXT" \
 			-F"desp=$DESP" \
-			"http://sc.ftqq.com/${FTSCKEY}.send"
+			"http://sc.ftqq.com/${FTSCKEY}.send")
+	if [ $(echo ${FT_JSON}|grep success|wc -l) -eq 0 ];then
+		echo -e "$date( +%F' '%T)\n${FT_JSON}\n"
+		exit
+	fi	
 }
 #echo -e "local ip:"$LOCALIPV6"\nremote ip:"$REMOTEIPV6
 if [ "$LOCALIPV6" == "$REMOTEIPV6" ];then
 	#echo "ip was not changed , exiting..."
 	exit
 else
-	curl -s -X POST ${MODIFY_URL} -d ${MODIFYARG} >${JSONFILE}
+	MODIFY_JSON=$(curl -s -X POST ${MODIFY_URL} -d ${MODIFYARG})
+	if [ $(echo ${MODIFY_JSON}|grep success|wc -l) -eq 0 ];then
+		echo -e "$date( +%F' '%T)\tMODIFY\n"
+		exit
+	fi	
+	echo ${MODIFY_JSON}|sed "s/record\"\:\{\"id\"\:/records\"\:\[\{\"id\"\:\"/g"|sed "s/,\"name/\",\"name/g" > ${JSONFILE}
 	echo -e "${LOCALIPV6}\t$(date +%F' '%T)\n" >> ${LOGFILE}	
 	if [ $FTPUSH -eq 1 ];then
 		ftPush
