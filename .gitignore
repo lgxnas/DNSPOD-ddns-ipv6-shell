@@ -1,5 +1,5 @@
 *.log
 *.json
 *.conf
-test*
+*test*.sh
 *.txt
