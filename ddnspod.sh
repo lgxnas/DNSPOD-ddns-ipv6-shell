@@ -23,8 +23,9 @@ LOCALIPV6=$(ip route get 240c::6666|awk -F'src ' '{print $2}'|cut -d' ' -f1)
 if [ ! -f "$JSONFILE" ]
 then
 	LIST_JSON=$(curl -s -X POST ${LIST_URL} -d ${ARG})
-	if [ $(echo ${LIST_JSON}|grep successful|wc -l) -eq 0 ];then
-		echo -e "获取DnsPod记录信息失败\t$(date +%F' '%T)\n"
+	if [ $(echo ${LIST_JSON}|grep 'code":"1"'|wc -l) -eq 0 ];then
+		echo -e "获取DnsPod记录信息失败\t$(date +%F' '%T)"
+		echo ${LIST_JSON}
 		exit
 	fi
 	echo ${LIST_JSON} > ${JSONFILE}
@@ -59,12 +60,13 @@ if [ "$LOCALIPV6" == "$REMOTEIPV6" ];then
 	exit
 else
 	MODIFY_JSON=$(curl -s -X POST ${MODIFY_URL} -d ${MODIFYARG})
-	if [ $(echo ${MODIFY_JSON}|grep success|wc -l) -eq 0 ];then
-		echo -e "$(date +%F' '%T)\tMODIFY\n"
+	if [ $(echo ${MODIFY_JSON}|grep 'code":"1"'|wc -l) -eq 0 ];then
+		echo -e "$(date +%F' '%T)\tmodify failed"
+		echo ${MODIFY_JSON}
 		exit
 	fi	
 	echo ${MODIFY_JSON}|sed 's/record":{"id":/records":[{"id":"/g'|sed 's/,"name/","name/g' > ${JSONFILE}
-	echo -e "${LOCALIPV6}\t$(date +%F' '%T)\n" >> ${LOGFILE}	
+	echo -e "${LOCALIPV6}\t$(date +%F' '%T)" >> ${LOGFILE}	
 	if [ $FTPUSH -eq 1 ];then
 		ftPush
 	fi
