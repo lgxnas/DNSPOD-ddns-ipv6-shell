@@ -1,4 +1,9 @@
 #----config----
+# https://docs.dnspod.cn/api/5f55993d8ae73e11c5b01ce6/
+# 5. 关于UserAgent：
+# 请求的时候必须设置 UserAgent ，如果不设置或者设置为不合法的（比如设置为浏览器的）也会导致帐号被封禁 API 。
+# UserAgent 的格式必须为：程序英文名称/版本(联系邮箱)，比如：MJJ DDNS Client/1.0.0 (dnspod@dnspod.cn)。
+USERAGENT="DNSPOD ddns client/1.0.0 (username@gmail.com)"
 #your domain : "example.com" DOMAIN="example.com"
 DOMAIN="example.com"
 #subdomain : "test.example.com" SUBDOMAIN="test"

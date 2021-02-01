@@ -18,11 +18,13 @@ CONFFILE=${WORKDIRECTORY}"ipv6.conf"
 #查询记录列表的基本参数
 ARG="login_token="${ID}','${TOKEN}"&format=json&domain="${DOMAIN}"&sub_domain="${SUBDOMAIN}
 
+CURLCMD="curl -sA ${USERAGENT} -X POST"
+
 #get localipv6 and remoteipv6
 LOCALIPV6=$(ip route get 240c::6666|awk -F'src ' '{print $2}'|cut -d' ' -f1)
 if [ ! -f "$JSONFILE" ]
 then
-	LIST_JSON=$(curl -s -X POST ${LIST_URL} -d ${ARG})
+	LIST_JSON=$(${CURLCMD} ${LIST_URL} -d ${ARG})
 	if [ $(echo ${LIST_JSON}|grep 'code":"1"'|wc -l) -eq 0 ];then
 		echo -e "获取DnsPod记录信息失败\t$(date +%F' '%T)"
 		echo ${LIST_JSON}
@@ -59,7 +61,7 @@ if [ "$LOCALIPV6" == "$REMOTEIPV6" ];then
 	#echo "ip was not changed , exiting..."
 	exit
 else
-	MODIFY_JSON=$(curl -s -X POST ${MODIFY_URL} -d ${MODIFYARG})
+	MODIFY_JSON=$(${CURLCMD} ${MODIFY_URL} -d ${MODIFYARG})
 	if [ $(echo ${MODIFY_JSON}|grep 'code":"1"'|wc -l) -eq 0 ];then
 		echo -e "$(date +%F' '%T)\tmodify failed"
 		echo ${MODIFY_JSON}
