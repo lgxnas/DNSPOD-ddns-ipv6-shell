@@ -22,6 +22,10 @@ CURLCMD="curl -sA ${USERAGENT} -X POST"
 
 #get localipv6 and remoteipv6
 LOCALIPV6=$(ip route get 240c::6666|awk -F'src ' '{print $2}'|cut -d' ' -f1)
+if [ $(echo $LOCALIPV6|tr -cd :|wc -c) -eq 0 ];then
+    echo "get ipv6 failed" >&2
+    exit 1
+fi
 if [ ! -f "$JSONFILE" ]
 then
 	LIST_JSON=$(${CURLCMD} ${LIST_URL} -d ${ARG})
